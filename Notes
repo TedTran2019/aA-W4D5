@@ -1,0 +1,205 @@
+Why test code?
+1. Make sure code works
+2. Increase flexibility and reduce refactoring fear
+3. Makes collaboration easier
+4. Produce documentation
+
+Testing Pyramid
+-------------------
+Unit tests -> each individual unit works
+Integration Tests -> parts of application work together
+End to End tests -> bigger scale, UI experience
+
+Models -> unit tests
+Controllers -> integration tests
+Views -> end to end tests
+
+RSpec + Capybara!
+gem 'faker' -> development too, generate random data
+gem 'factory_bot_rails' -> development too, instant model instantiation
+gem 'rspec-rails' -> test
+gem 'capybara'-> test features within application, similar to how user would interact
+gem 'shoulda-matchers' -> nice one liners for validations, detailed error messages
+gem 'launchy' -> launch external applications such as email
+
+rails g rspec:install-> spec directories rather than test(with minitest)
+
+In .rspec -> --color, --format documentation
+
+application.config -> config.generators do |g|...
+Factory bot is much easier than fixtures! Replace fixtures/mini_test in directory?
+
+spec -> models
+describe -> it -> expect
+Test: validations, associations, class methods, error messages
+#valid? is useful for validation tests
+shoulda-matchers helps to shorten most tests. It's a 1 line it/expect block
+
+it { should validate_presence_of(:etc) } -> for presence validations
+it { should have_many(:etc) } -> for associations
+
+#errors[:whatever].to eq etc.. -> for custom validations
+#to include
+#not_to include
+#some_method.where_values_hash.to eq(bleh: ok) -> Probably won't use this much
+
+spec -> factories -> look in the etc_model.rb files
+FactoryBot.define...-> Use Faker to populate with random data -> { } for diff data
+Then subject(:etc) { FactoryBot.build(:whatever you named in the model file) }
+Can give additional arguments to give what you want, ie. color: "green".
+Can build more than one per FactoryBot file!
+
+FactoryBot.create puts it into the database, while build simply makes it!
+-------------------------
+
+What to test in controllers?
+1. status codes + responses in various situations
+2. valid and invalid params
+
+RSPEC RAILS API
+Navigation: get/post/patch/delete
+Assertions: render_template, redirect_to, have_http_status, be_success
+
+context/describe are aliases for each other
+Use context to describe stuff like, with valid params, with invalid params, etc
+get :show, id: 1
+post :create, capy: { name: "Kath" }
+
+Capybara: Testing Rails Features -> enntire process/UI, end-to-end tests!
+Navigation: visit, click_on
+Forms: < fill_in "field", with: "value" >, choose, check, uncheck,
+< select "option", from: "select box" >
+Assertions: have_content, current_path, page
+Debugging: save_and_open_page
+
+features directory -> access to capybara API -> feature "name", type: :feature do...
+feature instead of describe, scenario instead of it
+
+rails_helper requires spec_helper
+in spec_helper, make useful methods for tests
+
+----------------------------------------------------
+
+Integration Tests -> integration of diff. components
+Unit tests -> individual units of application work -> typically test end to
+end app flows
+
+Gems to add!
+---------------
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'rails-controller-testing'
+	gem 'spring'
+end
+
+group :test do
+  gem 'faker'
+  gem 'capybara'
+  gem 'guard-rspec'
+  gem 'launchy'
+	gem 'shoulda-matchers'
+end
+
+group :development do
+	gem 'guard-rspec'
+	gem 'spring-commands-rspec'
+end
+In addition to annotate, better_errors, binding_of_caller, and pry-rails
+In total: 15 gems, not even including Rubocop and such.
+However, capybara and spring are automatically included so only 13 gems!
+
+1. rails db:create -> rails g rspec:install ->
+2. in .rspec config file, add in
+--color --require spec_helper --format documentation for readability
+3. Config to auto-generate starter files w/ RSpec -> in config/application.rb
+config.generators do |g|
+  g.test_framework :rspec,
+    :fixtures => false,
+    :view_specs => false,
+    :helper_specs => false,
+    :routing_specs => false,
+    :controller_specs => true,
+    :request_specs => false
+end
+https://guides.rubyonrails.org/configuring.html#configuring-generators
+4. Manually create spec/features folder for features testing. (Remember _spec naming)
+5. Clean up directory of Minitest/Fixture folders
+6. Optional, setting up Guard and Spring
+
+spring -> Rails app pre-loader
+rspec-rails -> rspec for rails
+spring-commands-rspec -> leverage Spring's preloading w/ rspec tests
+guard -> monitors for changes to files whose path match w/ regex, will trigger
+execution of rspec tests in response to changes to app's files
+
+a. bundle exec guard init -> creates Guardfile
+b. guard :rspec, cmd: 'spring rspec' do
+  watch(%r{^app/}) { 'spec' }
+  watch(%r{^spec/}) { 'spec' }
+  watch('config/routes.rb') { 'spec' }
+end
+-> Basically just run specs whenever any file changes in app, spec, or routes
+Notice 'spring rspec' to use preloading
+
+If rails g rspec:install seems to hang, close and try to run "spring stop" then
+run rails g rspec:install again
+spring binstub --all -> modifies files in bin directory so that certain commands
+can be run via the Spring runner
+
+bundle exec guard -> Fire up the Guard console!
+bundle update gem_name if anything is out of date
+
+Configuring shoulda-matchers!
+In rails_helper.rb -> configure shoulda-matchers to use rspec as testing framework
+and use the rails library
+
+https://github.com/thoughtbot/shoulda-matchers#rspec
+# in rails_helper.rb
+require 'shoulda/matchers'
+Shoulda::Matchers.configure do |config|
+    config.integrate do |with|
+      with.test_framework :rspec
+      with.library :rails
+    end
+  end
+-----------------------------------
+To generate model specs in spec/models, can do
+rails g rspec:model #{model_name}
+
+When testing queries, can
+1. inspect properties using #where_values_hash and #order_values
+2. actually query the DB
+
+To use factorybot w/ rspec, create a file called factories.rb in my_app/spec
+Or can make a spec/factories directory and put individual factories files inside
+Use Faker gem to populate factories w/ fake data
+
+May need to require 'spec_helper' in rspec files (Maybe)
+
+factorybot sequences! very useful as an iterator
+Values in a sequence are generated by calling "generate"
+https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#sequences
+
+build_list, create_list in factorybot to create many instances at once
+FactoryBot.lint -> verifies that all FactoryBot factories are valid
+
+Controller testing -> correct response? -> service level testing aka middle level
+rails g rspec:controller #{table_name}
+Tests for each action in controllers!
+render_template, redirect_to, have_http_status
+HTTP method :method, whatever you want inserted like params
+Remember #first, #second, #last, etc for active record objects
+
+Capybara -> Integration tests
+Top of each spec file: require 'rails_helper'
+#visit,#click_link, #click_button, #click_on
+#fill_in, #choose, #check, #uncheck, #attach_file, #select
+#page
+https://rdoc.info/github/jnicklas/capybara#The_DSL
+
+If you use setting 'js:true', it switches to selenium webdriver which doesn't use
+transactions. Means that database must be cleaned before each test-- can use
+database-cleaner gem.
+
+Use launchy by putting in gemfile, then call save_and_open_page

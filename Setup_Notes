@@ -1,0 +1,105 @@
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'rails-controller-testing'
+	gem 'annotate'
+	gem 'better_errors'
+	gem 'binding_of_caller'
+	gem 'pry-rails'
+end
+
+group :test do
+  gem 'faker'
+  gem 'guard-rspec'
+  gem 'launchy'
+	gem 'shoulda-matchers'
+end
+
+group :development do
+	gem 'guard-rspec'
+	gem 'spring-commands-rspec'
+end
+
+spring and capybara already included on project initialization
+-------------------------------------------------
+
+rails g rspec:install
+.rspec -> --color, --format documentation, --require spec_helper
+
+Remember that all specs end with _spec
+Createful useful test methods and put them in spec_helper
+
+New generation commands:
+rails g rspec:model #{model_name}
+rails g rspec:controller #{table_name}
+
+---------------------------------------------------------------
+# config/application.rb
+config.generators do |g|
+  g.test_framework :rspec,
+    :fixtures => false,
+    :view_specs => false,
+    :helper_specs => false,
+    :routing_specs => false,
+    :controller_specs => true,
+    :request_specs => false
+end
+
+----------------------------------------------------
+# in rails_helper.rb
+require 'shoulda/matchers'
+Shoulda::Matchers.configure do |config|
+    config.integrate do |with|
+      with.test_framework :rspec
+      with.library :rails
+    end
+  end
+-----------------------------------------------------
+# Create spec/factories directory and populate w/ etc_factory.rb files
+# Or just make a factories.rb in /spec directory
+# Example. -> Configure rails generator to automatically do?
+FactoryBot.define do
+	factory :etc do
+		name 'Fluffy'
+		real_name Faker::Name.name
+	end
+end
+------------------------------------------------------------------
+
+Clean up Minitest/Fixture folders, and customize rails g to not generate them
+
+-------------------------------------------------------
+
+bundle exec guard init -> creates Guardfile
+# in Guardfile
+guard :rspec, cmd: 'spring rspec' do
+  watch(%r{^app/}) { 'spec' }
+  watch(%r{^spec/}) { 'spec' }
+  watch('config/routes.rb') { 'spec' }
+end
+
+rails g rspec:install hanging, run "spring stop" b4 rerunning.
+spring binstub -all -> Certain commands run via Spring runner
+bundle exec guard -> Fire up Guard console
+
+--------------------------------------------------------------
+
+# Create spec/features directory to use Capybara
+require 'rails_helper' in feature spec files
+
+--------------------------------------------------------
+
+Customizing rails generator? -> Not produce Minitest/fixture folders(uses test_unit
+variable, done automatically upon change), create FactoryBot files in the right directory
+https://guides.rubyonrails.org/generators.html
+Customizing workflow -> can change what is generated/what isn't, make own
+generators, add generator to scaffold, etc.
+
+A good idea would be to create a scaffold for automatic model testing... could
+be an interesting project. As well as add FactoryBot generator files
+automatically.
+
+Maybe just do all this in a fresh directory, upload it to Github, then just
+pull from Github everytime until there is a new update and you wish to switch
+versions.
+----------------------------------------------------------
