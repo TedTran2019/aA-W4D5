@@ -203,3 +203,33 @@ transactions. Means that database must be cleaned before each test-- can use
 database-cleaner gem.
 
 Use launchy by putting in gemfile, then call save_and_open_page
+
+Ruby magic and shortcuts are always so cool
+Like thing: other_thing being short for :thing => other_thing
+Or automatic conversion of hashes into 1 argument
+
+Use instance variables instead of regular variables in
+rspec in before(:each) so you can use said vars in "it" blocks.
+before creates instance variables; let creates lazily-evaluated local variables
+Ex. let only makes when called into existence by actual test, also memoized so
+very useful for database requests. Remember only memoizes in SAME example tho(it block)
+Ex. before statments are run before each test
+
+Use FactoryBot + Faker
+Notice how instructor solution also tested
+For Model
+----------
+1. creates password digest when password is given
+2. creates session token before validation
+Look at usage of #valid?, which calls validation methods
+Usage of same user subject, then just calling save on said subject to have
+it persisted into the database
+
+For Controller and Features
+--------------
+Nothing to correct
+
+Remember that Capybara does something like, fill_in 'username', it'll only do it
+correctly if the label is exactly the same(case sensitive)
+
+npm install -> install packages listed in package.json

@@ -6,21 +6,37 @@ group :development, :test do
 	gem 'better_errors'
 	gem 'binding_of_caller'
 	gem 'pry-rails'
+  gem 'guard-rspec'
 end
 
 group :test do
   gem 'faker'
-  gem 'guard-rspec'
   gem 'launchy'
 	gem 'shoulda-matchers'
 end
 
 group :development do
-	gem 'guard-rspec'
 	gem 'spring-commands-rspec'
 end
 
-spring and capybara already included on project initialization
+spring, capybara, rails-controller-testing
+already included on project initialization
+
+If using Rails 6 and rspec-rails hasn't been updated to 4.0 yet,
+then replace rspec-rails with
+  gem 'rspec-rails', git: 'https://github.com/rspec/rspec-rails', branch: '4-0-dev'
+  gem 'rspec-core', git: 'https://github.com/rspec/rspec-core'
+  gem 'rspec-mocks', git: 'https://github.com/rspec/rspec-mocks'
+  gem 'rspec-support', git: 'https://github.com/rspec/rspec-support'
+  gem 'rspec-expectations', git: 'https://github.com/rspec/rspec-expectations'
+
+  Also, since assert_template has been extracted into a gem, add in
+  gem 'rails-controller-testing' if it wasn't included on initialization
+
+bundle install
+then -> bundle update after for good measure
+
+Exclude 'guard-rspec' if you don't wish to use Guard.
 -------------------------------------------------
 
 rails g rspec:install
@@ -43,7 +59,7 @@ config.generators do |g|
     :routing_specs => false,
     :controller_specs => true,
     :request_specs => false
-end
+  end
 
 ----------------------------------------------------
 # in rails_helper.rb
@@ -79,7 +95,7 @@ guard :rspec, cmd: 'spring rspec' do
 end
 
 rails g rspec:install hanging, run "spring stop" b4 rerunning.
-spring binstub -all -> Certain commands run via Spring runner
+spring binstub --all -> Certain commands run via Spring runner
 bundle exec guard -> Fire up Guard console
 
 --------------------------------------------------------------
@@ -103,3 +119,7 @@ Maybe just do all this in a fresh directory, upload it to Github, then just
 pull from Github everytime until there is a new update and you wish to switch
 versions.
 ----------------------------------------------------------
+
+Right now, as of Oct 11, 2019
+Rails 6 -> Requires rspec-rails 4 -> Guard needs rspec version less than 4 to run
+Don't include Guard in projects for now.
