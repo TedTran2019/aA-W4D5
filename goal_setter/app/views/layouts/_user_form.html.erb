@@ -1,0 +1,14 @@
+<% action = (submit == 'Sign Up' ? users_url : session_url) %>
+<% banner = (submit == 'Sign Up' ? 'Sign Up!' : 'Sign In!') %>
+<h2><%= banner %></h2>
+<form action="<%=action%>" method="post">
+	<%= auth_token %>
+
+	<label for="username">Username: </label>
+	<input type="text" name="user[username]" id="username" value="<%=user.username%>">
+
+	<label for="password">Password: </label>
+	<input type="password" name="user[password]" id="password">
+
+	<button type="submit"><%= submit %></button>
+</form>
