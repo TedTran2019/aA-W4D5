@@ -1,4 +1,6 @@
 class GoalsController < ApplicationController
+	before_action :ensure_logged_in
+
 	def index
 		@goals = current_user.goals
 		render :index
@@ -44,7 +46,7 @@ class GoalsController < ApplicationController
 		@goal = current_user.goals.find_by(id: params[:id])
 		if @goal
 			if @goal.update_attributes(goal_params)
-				render :show
+				redirect_to goals_url
 			else
 				flash.now[:errors] = @goal.errors.full_messages
 				render :edit
@@ -59,7 +61,7 @@ class GoalsController < ApplicationController
 		@goal = current_user.goals.find_by(id: params[:id])
 		if @goal
 			@goal.destroy
-			render :show
+			redirect_to goals_url
 		else
 			flash.now[:errors] = 'Not found!'
 			render 'layouts/not_found', status: :not_found
