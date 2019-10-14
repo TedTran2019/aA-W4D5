@@ -23,6 +23,18 @@ class User < ApplicationRecord
 
 	attr_reader :password
 
+	has_many :goals,
+	foreign_key: :owner_id,
+	dependent: :destroy
+
+	has_many :comments,
+	as: :commentable,
+	dependent: :destroy
+
+	has_many :written_comments,
+	class_name: :Comment,
+	dependent: :destroy
+
 	def self.generate_session_token
 		SecureRandom::urlsafe_base64(16)
 	end

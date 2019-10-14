@@ -1,0 +1,15 @@
+<% if goal.completed %>
+	<form action="<%=goal_url(goal)%>" method="post">
+		<%= auth_token %>
+		<input type="hidden" name="_method" value="patch">
+		<input type="hidden" name="goal[completed]" value="false">
+		<button type="submit">Oops! Did not complete.</button>
+	</form>
+<% else %>
+	<form action="<%=goal_url(goal)%>" method="post">
+		<%= auth_token %>
+		<input type="hidden" name="_method" value="patch">
+		<input type="hidden" name="goal[completed]" value="true">
+		<button type="submit">Complete</button>
+	</form>
+<% end %>

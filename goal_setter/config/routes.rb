@@ -1,6 +1,23 @@
 # == Route Map
 #
 #                                Prefix Verb   URI Pattern                                                                              Controller#Action
+#                                 users GET    /users(.:format)                                                                         users#index
+#                                       POST   /users(.:format)                                                                         users#create
+#                              new_user GET    /users/new(.:format)                                                                     users#new
+#                                  user GET    /users/:id(.:format)                                                                     users#show
+#                           new_session GET    /session/new(.:format)                                                                   sessions#new
+#                               session DELETE /session(.:format)                                                                       sessions#destroy
+#                                       POST   /session(.:format)                                                                       sessions#create
+#                                 goals GET    /goals(.:format)                                                                         goals#index
+#                                       POST   /goals(.:format)                                                                         goals#create
+#                              new_goal GET    /goals/new(.:format)                                                                     goals#new
+#                             edit_goal GET    /goals/:id/edit(.:format)                                                                goals#edit
+#                                  goal GET    /goals/:id(.:format)                                                                     goals#show
+#                                       PATCH  /goals/:id(.:format)                                                                     goals#update
+#                                       PUT    /goals/:id(.:format)                                                                     goals#update
+#                                       DELETE /goals/:id(.:format)                                                                     goals#destroy
+#                                  root GET    /                                                                                        users#index
+#                              comments POST   /comments(.:format)                                                                      comments#create
 #         rails_mandrill_inbound_emails POST   /rails/action_mailbox/mandrill/inbound_emails(.:format)                                  action_mailbox/ingresses/mandrill/inbound_emails#create
 #         rails_postmark_inbound_emails POST   /rails/action_mailbox/postmark/inbound_emails(.:format)                                  action_mailbox/ingresses/postmark/inbound_emails#create
 #            rails_relay_inbound_emails POST   /rails/action_mailbox/relay/inbound_emails(.:format)                                     action_mailbox/ingresses/relay/inbound_emails#create
@@ -26,4 +43,10 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :show, :new, :create]
 
   resource :session, only: [:new, :create, :destroy]
+
+  resources :goals
+
+  root to: 'users#index'
+
+  resources :comments, only: [:create]
 end

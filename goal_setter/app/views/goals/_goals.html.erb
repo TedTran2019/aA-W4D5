@@ -1,0 +1,12 @@
+<% goals.each do |goal| %>
+	<% next if goal.owner_id != current_user.id && goal.private %>
+	<ul><li><%= link_to goal.title, goal_url(goal) %></li></ul>
+	<p><%= goal.private ? 'Private' : 'Public'  %></p>
+	<p><%= goal.completed ? 'Complete' : 'Ongoing' %></p>
+	<%= render 'goals/complete_button', goal: goal %>
+	<form action="<%=goal_url(goal)%>" method="post">
+		<%= auth_token %>
+		<input type="hidden" name="_method" value="delete">
+		<button type="submit"><%= "delete '#{goal.title}' goal" %></button>
+	</form>
+<% end %>

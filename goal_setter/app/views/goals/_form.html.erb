@@ -1,0 +1,25 @@
+<% action = (submit == 'New Goal' ? goals_url : goal_url(goal)) %>
+
+<form action="<%=action%>" method="post">
+	<%= auth_token %>
+	<% unless submit == 'New Goal' %>
+		<input type="hidden" name="_method" value="patch">
+	<% end %>
+
+	<label for="title">Title: </label>
+	<input type="text" name="goal[title]" id="title" value="<%=goal.title%>">
+
+	<label for="details">Details: </label>
+	<textarea name="goal[details]" id="details" cols="30" rows="10"
+	><%= goal.details %></textarea>
+
+	<label for="private">Private? </label>
+	<input type="checkbox" name="goal[private]" id="private" value="true"
+	<%= goal.private == true ? 'checked' : '' %>>
+
+	<label for="completed">Completed? </label>
+	<input type="checkbox" name="goal[completed]" id="completed" value="true"
+	<%= goal.completed == true ? 'checked' : '' %>>
+
+	<button type="submit"><%= submit %></button>
+</form>

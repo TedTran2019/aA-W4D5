@@ -26,7 +26,7 @@ class UsersController < ApplicationController
 			render :show
 		else
 			flash.now[:errors] = "User not found!"
-			render :not_found, status: :not_found
+			render 'layouts/not_found', status: :not_found
 		end
 	end
 

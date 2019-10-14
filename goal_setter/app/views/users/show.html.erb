@@ -1,1 +1,23 @@
-<%= @user.username %>
+<h2><%= "#{@user.username}'s Profile" %></h2>
+<% @user.comments.each do |comment| %>
+	<p><%= comment.body %></p>
+<% end %>
+
+<h2>New Comment</h2>
+<form action="<%=comments_url%>" method="post">
+	<%= auth_token %>
+	<label for="body">Comment</label>
+	<input type="hidden" name="comment[commentable_id]" value="<%=@user.id%>">
+	<input type="hidden" name="comment[commentable_type]" value="User">
+	<textarea name="comment[body]" id="body" cols="30" rows="10"></textarea>
+	<button type="submit">Save Comment</button>
+</form>
+
+<h4><%= "#{@user.username}'s Goals: " %></h4>
+<% if current_user == @user %>
+	<p><%= link_to 'New Goal', new_goal_url %></p>
+<% end %>
+
+<%= render 'goals/goals', goals: @user.goals %>
+
+<%= link_to 'All Users', users_url %>

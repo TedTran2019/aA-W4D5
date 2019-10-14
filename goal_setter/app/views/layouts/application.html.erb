@@ -10,19 +10,23 @@
   </head>
 
   <body>
-    <% if logged_in? %>
-      <%= "Welcome #{current_user.username}" %>
-      <form action="<%=session_url%>" method="post">
-        <%= auth_token %>
-        <input type="hidden" name="_method" value="delete">
-        <button type="submit">Log Out</button>
-      </form>
-    <% else %>
-      <%= link_to 'Sign Up', new_user_url %>
-      or
-      <%= link_to 'Log In', new_session_url  %>
-    <% end %>
+    <h1>GOALING APP</h1>
+    <aside class="welcome">
+      <% if logged_in? %>
+        <p><%= "Welcome #{current_user.username}" %></p>
+        <form action="<%=session_url%>" method="post">
+          <%= auth_token %>
+          <input type="hidden" name="_method" value="delete">
+          <button type="submit">Log Out</button>
+        </form>
+      <% else %>
+        <p><%= link_to 'Sign Up', new_user_url %></p>
+        <p>or</p>
+        <p><%= link_to 'Log In', new_session_url  %></p>
+      <% end %>
+    </aside>
 
     <%= yield %>
+
   </body>
 </html>

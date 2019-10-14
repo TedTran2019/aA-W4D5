@@ -13,3 +13,22 @@
  *= require_tree .
  *= require_self
  */
+
+ .welcome {
+	border: 1px solid blue;
+	width: 20%;
+	box-sizing: border-box;
+ }
+
+ p {
+	 display: block;
+	 margin-block-start: 2em;
+	 margin-block-end: 2em;
+	 margin-inline-start: 1em;
+	 margin-inline-end: 1em;
+ }
+
+ form {
+	 margin-left: 1em;
+	 margin-bottom: 1em;
+ }

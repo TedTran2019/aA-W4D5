@@ -1,0 +1,41 @@
+<table>
+	<tbody>
+		<tr>
+			<th>Title: </th>
+			<td><%= @goal.title %></td>
+		</tr>
+		<tr>
+			<th>Details: </th>
+			<td><%= @goal.details %></td>
+		</tr>
+		<tr>
+			<th>Visibility: </th>
+			<td><%= @goal.private == true ? 'Private' : 'Public' %></td>
+		</tr>
+		<tr>
+			<th>Finished?: </th>
+			<td><%= @goal.completed == true ? 'Completed' : 'Ongoing' %></td>
+		</tr>
+		<% if @goal.owner == current_user %>
+			<tr>
+				<th>Completed?</th>
+				<td><%= render 'complete_button', goal: @goal %></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<h2>Comments</h2>
+<% @goal.comments.each do |comment| %>
+	<p><%= comment.body %></p>
+<% end %>
+
+<h2>New Comment</h2>
+<form action="<%=comments_url%>" method="post">
+	<%= auth_token %>
+	<label for="body">Comment</label>
+	<input type="hidden" name="comment[commentable_id]" value="<%=@goal.id%>">
+	<input type="hidden" name="comment[commentable_type]" value="Goal">
+	<textarea name="comment[body]" id="body" cols="30" rows="10"></textarea>
+	<button type="submit">Save Comment</button>
+</form>
