@@ -233,3 +233,27 @@ Remember that Capybara does something like, fill_in 'username', it'll only do it
 correctly if the label is exactly the same(case sensitive)
 
 npm install -> install packages listed in package.json
+
+Know how to write model and controller tests using RSpec
+Know how to write integration tests using Capybara and RSpec
+Know what and when to test
+Understand how to test behavior rather than implementation
+Learn to develop one feature at a time (the 'slices' approach)
+Recognize how concerns and polymorphic associations can dry up your code
+
+Models: validations, associations, class methods, error messages
+Controllers: methods in valid/invalid context
+Views: a process with valid/invalid params
+
+For default values, constraint -> null: false should be present
+However, there shouldn't be a model presence validation
+
+CSS -> be careful of tags that you didn't close! Common error.
+Setting <p> tag to blocks, then utilizing margin-block-start,
+margin-block-end, margin-inline-start, margin-inline-end which
+can start the text up/down/right/left
+
+button_to straight up never works for me in Rails 6.
+
+Hmm, putting stuff into partials is unbelievably useful.
+I believe my weakness rn is with CSS.

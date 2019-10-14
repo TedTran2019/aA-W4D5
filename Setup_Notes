@@ -2,9 +2,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'rails-controller-testing'
-	gem 'annotate'
-	gem 'better_errors'
-	gem 'binding_of_caller'
 	gem 'pry-rails'
   gem 'guard-rspec'
 end
@@ -17,6 +14,9 @@ end
 
 group :development do
 	gem 'spring-commands-rspec'
+  gem 'annotate'
+	gem 'better_errors'
+	gem 'binding_of_caller'
 end
 
 spring, capybara, rails-controller-testing
@@ -37,6 +37,9 @@ bundle install
 then -> bundle update after for good measure
 
 Exclude 'guard-rspec' if you don't wish to use Guard.
+
+For annotate since the change, must
+rails g annotate:install then change settings from 'false' to 'true' to use
 -------------------------------------------------
 
 rails g rspec:install
