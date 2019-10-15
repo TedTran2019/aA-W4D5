@@ -107,6 +107,9 @@ bundle exec guard -> Fire up Guard console
 require 'rails_helper' in feature spec files
 
 --------------------------------------------------------
+https://mattbrictson.com/lightning-fast-sass-reloading-in-rails
+For setting up livereload, no need to refresh page to see style changes.
+-------------------------------------------------------------
 
 Customizing rails generator? -> Not produce Minitest/fixture folders(uses test_unit
 variable, done automatically upon change), create FactoryBot files in the right directory
